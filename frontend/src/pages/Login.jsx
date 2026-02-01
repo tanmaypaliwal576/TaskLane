@@ -39,9 +39,9 @@ export default function Login() {
       localStorage.setItem("tasklane_token", data.token);
       localStorage.setItem("tasklane_user", JSON.stringify(data.user));
 
-      if (data.user.role === "admin") navigate("/admin");
-      else if (data.user.role === "manager") navigate("/manager");
-      else navigate("/user");
+      
+      if (data.user.role === "manager") navigate("/manager/dashboard");
+      else navigate("/user/dashboard");
     } catch (err) {
       setError(err?.response?.data?.message || "Something went wrong");
     } finally {

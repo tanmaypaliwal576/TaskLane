@@ -28,4 +28,56 @@ export const gettasks = async () => {
   return res.data;
 };
 
+export const managertasks = async () => {
+  const token = localStorage.getItem("tasklane_token");
+
+  const res = await api.get("/manager/mytasks", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+
+export const getallusers = async () => {
+  const token = localStorage.getItem("tasklane_token");
+
+  const res = await api.get("/manager/allusers", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+export const createtask = async (data) => {
+  const token = localStorage.getItem("tasklane_token");
+
+  const res = await api.post("/manager/create", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
+
+
+export const getallmanagertasks = async () => {
+  const token = localStorage.getItem("tasklane_token");
+
+  const res = await api.get("/manager/mytasks", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+);
+
+return res.data;
+}
+
+
 export default api;

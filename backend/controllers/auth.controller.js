@@ -7,7 +7,7 @@ export const signup = async (req, res) => {
   try {
     const { name, email, password , role} = req.body;
 
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -42,6 +42,7 @@ export const signup = async (req, res) => {
       },
     });
   } catch (error) {
+    console.log(error.message);
     return res.status(500).json({ message: error.message });
   }
 };
