@@ -11,7 +11,7 @@ export default function Signup() {
     email: "",
     password: "",
     confirmPassword: "",
-    agree: false,
+    role: "",
   });
 
   const [showPass, setShowPass] = useState(false);
@@ -24,7 +24,7 @@ export default function Signup() {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "radio" ? value : value,
     }));
     setError("");
   };
@@ -34,7 +34,7 @@ export default function Signup() {
     setLoading(true);
     setError("");
 
-    if (!form.name || !form.email || !form.password || !form.confirmPassword) {
+    if (!form.name || !form.email || !form.password || !form.confirmPassword || !form.role) {
       setError("All fields required");
       setLoading(false);
       return;
@@ -53,6 +53,7 @@ export default function Signup() {
         name: form.name,
         email: form.email,
         password: form.password,
+        role: form.role,
       });
 
       if (!data?.token) {
@@ -63,8 +64,11 @@ export default function Signup() {
       localStorage.setItem("tasklane_token", data.token);
       localStorage.setItem("tasklane_user", JSON.stringify(data.user));
 
-      navigate("/user");
-    } catch {
+      if(data.user.role === "manager")  navigate("/manager/dashboard");
+      else
+      navigate("/user/dashboard");
+    } catch (err) {
+      console.log(err);
       setError("Something went wrong");
     } finally {
       setLoading(false);
