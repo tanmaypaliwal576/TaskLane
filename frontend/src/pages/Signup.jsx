@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signupUser } from "../utils/api";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -18,30 +19,34 @@ export default function Signup() {
   const [showConfirmPass, setShowConfirmPass] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
     setForm((prev) => ({
       ...prev,
       [name]: type === "radio" ? value : value,
     }));
-    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+   
 
     if (!form.name || !form.email || !form.password || !form.confirmPassword || !form.role) {
-      setError("All fields required");
+      toast.error("All fields required");
+      setLoading(false);
+      return;
+    }
+
+    if( !form.email.match(/^[a-zA-Z0-9._%+-]+@gmail\.com$/) ) {
+      toast.error("Please enter a valid Gmail address");
       setLoading(false);
       return;
     }
 
     if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match");
+     toast.error("Passwords do not match");
       setLoading(false);
       return;
     }
@@ -57,19 +62,21 @@ export default function Signup() {
       });
 
       if (!data?.token) {
-        setError("Signup failed");
+        toast.error("Signup failed");
+        setLoading(false);
         return;
       }
 
       localStorage.setItem("tasklane_token", data.token);
       localStorage.setItem("tasklane_user", JSON.stringify(data.user));
 
+      toast.success("Signup successful");
+
       if(data.user.role === "manager")  navigate("/manager/dashboard");
       else
       navigate("/user/dashboard");
     } catch (err) {
-      console.log(err);
-      setError("Something went wrong");
+      toast.error(err?.response?.data?.message || "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -100,12 +107,7 @@ export default function Signup() {
         >
           <h2 className="text-3xl font-semibold mb-6">Create Account</h2>
 
-          {error && (
-            <div className="mb-4 border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm">
-              {error}
-            </div>
-          )}
-
+       
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* NAME */}
             <input

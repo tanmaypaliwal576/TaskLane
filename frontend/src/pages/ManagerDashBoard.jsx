@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getallusers , createtask , getallmanagertasks} from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import { all } from "axios";
+import toast from "react-hot-toast";
 
 
 const ManagerDashboard = () => {
@@ -54,6 +55,7 @@ const handleSubmit = async (e) => {
 
   try {
     await createtask(form);
+    toast.success("Task created successfully");
 
     // Option A (best): refetch
     const updated = await getallmanagertasks();
@@ -93,6 +95,7 @@ useEffect(()=>{
   const handleLogout = () => {
     localStorage.removeItem("tasklane_token");
     localStorage.removeItem("tasklane_user");
+    toast.success("Logged out successfully");
     navigate("/login");
   };
 

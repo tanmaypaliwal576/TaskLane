@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../utils/api";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,26 +13,22 @@ export default function Login() {
   });
 
   const [showPass, setShowPass] = useState(false);
-  const [remember, setRemember] = useState(false);
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     try {
       const data = await loginUser(form);
 
       if (!data?.token) {
-        setError(data?.message || "Login failed");
+        toast.error("Login failed");
         setLoading(false);
         return;
       }
@@ -39,11 +36,12 @@ export default function Login() {
       localStorage.setItem("tasklane_token", data.token);
       localStorage.setItem("tasklane_user", JSON.stringify(data.user));
 
+      toast.success("Login successful");
       
       if (data.user.role === "manager") navigate("/manager/dashboard");
       else navigate("/user/dashboard");
     } catch (err) {
-      setError(err?.response?.data?.message || "Something went wrong");
+      toast.error(err?.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -72,12 +70,7 @@ export default function Login() {
         >
           <h2 className="text-3xl font-semibold mb-6">Sign In</h2>
 
-          {error && (
-            <div className="mb-4 border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm">
-              {error}
-            </div>
-          )}
-
+        
           <form onSubmit={handleSubmit} className="space-y-5">
             <input
               type="email"
