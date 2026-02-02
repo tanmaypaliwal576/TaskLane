@@ -80,4 +80,16 @@ return res.data;
 }
 
 
+export const contact = async (data) => {
+  const token = localStorage.getItem("tasklane_token");
+  const res = await api.post("/contact", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });  //send data to backend
+
+  return res.data; //send response back to frontend
+}
+
+
 export default api;

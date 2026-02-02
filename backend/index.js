@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import authroutes from "./routes/auth.routes.js";
 import userroutes from "./routes/user.routes.js";
 import managerroutes from "./routes/manager.routes.js";
+import contactroutes from "./routes/contact.routes.js";
 dotenv.config();
 
 //app
@@ -21,7 +22,7 @@ app.use(cookieParser());
 app.use("/api/auth", authroutes);
 app.use("/api/users", userroutes);
 app.use("/api/manager", managerroutes);
-
+app.use("/api/contact" , contactroutes)
 //connection
 connectDB();
 
