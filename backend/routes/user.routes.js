@@ -2,7 +2,7 @@ import express from "express";
 import { protect } from "../middlewares/auth.middleware.js";
 import {
   getMyTasks,
-  updateTaskStatus,
+  updatetasks,
 } from "../controllers/task.controller.js";
 import { authorize } from "../middlewares/role.middleware.js";
 const router = express.Router();
@@ -16,6 +16,6 @@ router.get("/me", protect, (req, res) => {
 
 router.get("/mytasks", protect, authorize("user"), getMyTasks);
 
-router.patch("/:id/status", protect, authorize("user"), updateTaskStatus);
+router.patch("/:id/status", protect, authorize("user"), updatetasks);
 
 export default router;

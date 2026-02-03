@@ -92,4 +92,15 @@ export const contact = async (data) => {
 }
 
 
+export const updatetask = async (id , status) => {
+  const token = localStorage.getItem("tasklane_token");
+
+  const res = await api.patch(`/users/${id}/status`, {status} , {
+    headers: {Authorization : `Bearer ${token}`}
+  });
+
+
+  return res.data;
+}
+
 export default api;
