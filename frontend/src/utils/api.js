@@ -103,4 +103,15 @@ export const updatetask = async (id , status) => {
   return res.data;
 }
 
+export const uploadfile = async (file) => {
+  const token = localStorage.getItem("tasklane_token");
+
+  const res = await api.post("/upload/uploadbyuser", file , {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+}
 export default api;
